@@ -379,16 +379,13 @@
         </button>
     </div>
     
-    <!-- Audio -->
-    <audio id="jump-sound" preload="auto">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-jump-arcade-game-166.mp3" type="audio/mpeg">
-    </audio>
-    <audio id="walk-sound" preload="auto">
-        <source src="https://assets.mixkit.co/sfx/preview/mixkit-footsteps-on-grass-503.mp3" type="audio/mpeg">
-    </audio>
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
+   <!-- Audio - ЛОКАЛЬНЫЕ ФАЙЛЫ -->
+<audio id="jump-sound" preload="auto">
+    <source src="jump.mp3" type="audio/mpeg">
+</audio>
+<audio id="walk-sound" preload="auto">
+    <source src="walk.mp3" type="audio/mpeg">
+</audio>
         // === CONFIGURATION ===
         let scene, camera, renderer;
         let playerGroup, parts = {};
