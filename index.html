@@ -1,0 +1,1482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Game</title>
+    <link rel="icon" href="a.png" type="image/png">
+    <style>
+        body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; background: #000; }
+        canvas { display: block; }
+        
+        /* ===== TOP PANEL BLACK-WHITE ===== */
+        #top-panel {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+        }
+        
+        /* Black-white flat buttons */
+        .top-btn {
+            width: 46px;
+            height: 46px;
+            background: #333;
+            border: 2px solid #666;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+            transition: all 0.1s;
+            position: relative;
+        }
+        
+        .top-btn:hover {
+            background: #444;
+            border-color: #888;
+        }
+        
+        .top-btn:active {
+            background: #222;
+            border-color: #555;
+        }
+        
+        .btn-icon {
+            width: 24px;
+            height: 24px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: grayscale(100%) brightness(1.5);
+        }
+        
+        #menu-btn .btn-icon {
+            background-image: url('https://cdn-icons-png.flaticon.com/512/56/56763.png');
+        }
+        
+        #chat-btn .btn-icon {
+            background-image: url('https://img.icons8.com/?size=100&id=VhoPIeUVX2mw&format=png&color=000000');
+            filter: grayscale(100%) brightness(1.8);
+            width: 26px;
+            height: 26px;
+        }
+        
+        /* ===== BLACK-WHITE MENU ===== */
+        #game-menu {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #222;
+            padding: 20px;
+            width: 280px;
+            display: none;
+            z-index: 1000;
+            border-radius: 6px;
+            border: 2px solid #555;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        .menu-title {
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #555;
+        }
+        
+        .menu-btn {
+            width: 100%;
+            padding: 12px;
+            margin: 6px 0;
+            background: #444;
+            border: 1px solid #666;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.1s;
+        }
+        
+        .menu-btn:hover {
+            background: #555;
+            border-color: #777;
+        }
+        
+        .menu-btn:active {
+            background: #333;
+        }
+        
+        #close-menu {
+            background: #444;
+            border-color: #666;
+        }
+        
+        #close-menu:hover {
+            background: #666;
+        }
+        
+        /* ===== CHAT UNDER BUTTON ===== */
+        #chat-container {
+            position: absolute;
+            top: 60px; /* Под кнопкой чата */
+            left: 10px;
+            width: 250px; /* Меньше размер */
+            background: #222;
+            display: none;
+            z-index: 100;
+            border-radius: 6px;
+            border: 2px solid #555;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .chat-header {
+            background: #333;
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 4px 4px 0 0;
+            border-bottom: 1px solid #555;
+        }
+        
+        .chat-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: white;
+        }
+        
+        .close-chat {
+            background: #444;
+            border: 1px solid #666;
+            color: white;
+            padding: 3px 8px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 11px;
+            transition: all 0.1s;
+        }
+        
+        .close-chat:hover {
+            background: #555;
+        }
+        
+        .close-chat:active {
+            background: #333;
+        }
+        
+        .chat-messages {
+            height: 160px; /* Меньше высота */
+            overflow-y: auto;
+            padding: 8px;
+            font-size: 12px;
+            background: #111;
+            border: 1px solid #333;
+            margin: 8px;
+            border-radius: 4px;
+            color: #ddd;
+        }
+        
+        .chat-message {
+            margin-bottom: 5px;
+            padding: 3px;
+            border-bottom: 1px solid #333;
+            font-size: 11px;
+        }
+        
+        .message-author {
+            color: #aaa;
+            font-weight: bold;
+            font-size: 11px;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 8px;
+            gap: 5px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 6px;
+            border: 1px solid #555;
+            border-radius: 4px;
+            font-size: 11px;
+            background: #111;
+            color: white;
+        }
+        
+        .chat-input button {
+            padding: 6px 10px;
+            background: #444;
+            border: 1px solid #666;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 11px;
+            transition: all 0.1s;
+        }
+        
+        .chat-input button:hover {
+            background: #555;
+        }
+        
+        .chat-input button:active {
+            background: #333;
+        }
+        
+        /* ===== SPEECH BUBBLE ===== */
+        #speech-bubble {
+            position: absolute;
+            background: #333;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: white;
+            white-space: nowrap;
+            z-index: 50;
+            display: none;
+            pointer-events: none;
+            border-radius: 6px;
+            border: 1px solid #555;
+        }
+        
+        #speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: #333 transparent transparent;
+        }
+        
+        /* ===== МОБИЛЬНОЕ УПРАВЛЕНИЕ - ИСПРАВЛЕННОЕ (БОЛЕЕ ПО ЦЕНТРУ) ===== */
+        #mobile-controls {
+            position: absolute;
+            bottom: 30px;
+            width: 100%;
+            justify-content: space-between;
+            padding: 0 15px; /* Меньше отступы */
+            pointer-events: none;
+            display: none;
+            z-index: 90;
+            box-sizing: border-box;
+        }
+        
+        .joystick {
+            width: 90px;
+            height: 90px;
+            background: rgba(30,30,30,0.8);
+            border: 2px solid #666;
+            border-radius: 50%;
+            position: relative;
+            pointer-events: auto;
+            margin-left: 10px; /* Сдвигаем вправо от края */
+        }
+        
+        .joystick-handle {
+            width: 45px;
+            height: 45px;
+            background: #444;
+            border-radius: 50%;
+            position: absolute;
+            top: 22.5px;
+            left: 22.5px;
+            transition: transform 0.1s;
+            border: 1px solid #666;
+        }
+        
+        .jump-btn {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: #333;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+            cursor: pointer;
+            border: 2px solid #666;
+            transition: all 0.1s;
+            margin-right: 10px; /* Сдвигаем влево от края */
+        }
+        
+        .jump-btn:active {
+            background: #222;
+        }
+        
+        #arrow-up {
+            font-size: 40px;
+            line-height: 1;
+            color: #aaa;
+        }
+        
+        /* ===== ОБЛАСТЬ ДЛЯ ВРАЩЕНИЯ КАМЕРЫ НА МОБИЛЬНЫХ ===== */
+        #camera-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70%;
+            pointer-events: auto;
+            z-index: 80;
+            display: none;
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        /* Вертикальная ориентация */
+        @media (orientation: portrait) {
+            #mobile-controls { 
+                display: flex; 
+                bottom: 20px;
+                padding: 0 10px;
+            }
+            #camera-area {
+                display: block;
+            }
+            #chat-container {
+                width: 220px;
+                top: 65px;
+                left: 5px;
+            }
+            .joystick, .jump-btn {
+                width: 85px;
+                height: 85px;
+            }
+            .joystick-handle {
+                width: 42px;
+                height: 42px;
+                top: 21.5px;
+                left: 21.5px;
+            }
+            #arrow-up {
+                font-size: 32px;
+            }
+        }
+        
+        /* Горизонтальная ориентация */
+        @media (orientation: landscape) {
+            #mobile-controls { 
+                display: flex; 
+                bottom: 10px;
+                padding: 0 8px;
+            }
+            #camera-area {
+                display: block;
+            }
+            .joystick, .jump-btn {
+                width: 75px;
+                height: 75px;
+                margin: 0 5px;
+            }
+            .joystick-handle {
+                width: 37px;
+                height: 37px;
+                top: 19px;
+                left: 19px;
+            }
+            #arrow-up {
+                font-size: 28px;
+            }
+        }
+        
+        /* Скрываем на ПК (не мобильных устройствах) */
+        @media (min-width: 1025px) and (pointer: fine) {
+            #mobile-controls { display: none !important; }
+            #camera-area { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Panel -->
+    <div id="top-panel">
+        <button class="top-btn" id="menu-btn" title="Menu">
+            <div class="btn-icon"></div>
+        </button>
+        <button class="top-btn" id="chat-btn" title="Chat">
+            <div class="btn-icon"></div>
+        </button>
+    </div>
+    
+    <!-- Menu -->
+    <div id="game-menu">
+        <div class="menu-title">MENU</div>
+        <button class="menu-btn" onclick="resumeGame()">Continue</button>
+        <button class="menu-btn" onclick="openSettings()">Settings</button>
+        <button class="menu-btn" onclick="showHelp()">Help</button>
+        <button class="menu-btn" id="close-menu" onclick="quitGame()">Quit</button>
+    </div>
+    
+    <!-- Chat (под кнопкой) -->
+    <div id="chat-container">
+        <div class="chat-header">
+            <div class="chat-title">CHAT</div>
+            <button class="close-chat" onclick="toggleChat()">X</button>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="chat-message"><span class="message-author">System:</span> Welcome to the game!</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chat-input" placeholder="Type a message..." maxlength="100">
+            <button onclick="sendMessage()">OK</button>
+        </div>
+    </div>
+    
+    <!-- Speech Bubble -->
+    <div id="speech-bubble"></div>
+    
+    <!-- Область для вращения камеры на мобильных -->
+    <div id="camera-area"></div>
+    
+    <!-- Mobile Controls (теперь ближе к центру) -->
+    <div id="mobile-controls">
+        <div class="joystick" id="joystickBase">
+            <div class="joystick-handle" id="joystickHandle"></div>
+        </div>
+        <button class="jump-btn" id="jumpBtn">
+            <div id="arrow-up">↑</div>
+        </button>
+    </div>
+    
+    <!-- Audio - ЛОКАЛЬНЫЕ ФАЙЛЫ -->
+    <audio id="jump-sound" preload="auto">
+        <source src="jump.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="walk-sound" preload="auto" loop>
+        <source src="walk.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="dance-music" preload="auto">
+        <source src="dance.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <script>
+        // === CONFIGURATION ===
+        let scene, camera, renderer;
+        let playerGroup, parts = {};
+        let platforms = [];
+        
+        // УЛУЧШЕННОЕ ОПРЕДЕЛЕНИЕ МОБИЛЬНОСТИ
+        function detectMobile() {
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            const isMobileUserAgent = /Mobi|Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+            const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            const isSmallScreen = window.innerWidth <= 768 || window.innerHeight <= 768;
+            
+            return (hasTouch && (isMobileUserAgent || isSmallScreen)) || isMobileUserAgent;
+        }
+        
+        let isMobile = detectMobile();
+        
+        // Controls
+        const keys = { w: false, a: false, s: false, d: false };
+        let cameraAngleX = 0, cameraAngleY = 0;
+        let cameraDistance = 10;
+        const minCameraDistance = 5;
+        const maxCameraDistance = 20;
+        let velocity = { x: 0, y: 0, z: 0 };
+        let onGround = true;
+        const gravity = 0.015;
+        const jumpForce = 0.35;
+        
+        // Camera
+        let isRightMouseDown = false;
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+        const cameraSensitivity = 0.003;
+        
+        // Animation
+        let animTarget = { legL: 0, legR: 0, armL: 0, armR: 0 };
+        let animCurrent = { legL: 0, legR: 0, armL: 0, armR: 0 };
+        let animSpeed = 0.2;
+        let lastStepTime = 0;
+        const stepInterval = 300;
+        
+        // Mobile controls
+        let joystickActive = false;
+        let joystickVector = { x: 0, y: 0 };
+        let cameraTouchId = null;
+        let initialPinchDistance = 0;
+        let cameraTouchStartX = 0;
+        let cameraTouchStartY = 0;
+        
+        // Плавный поворот персонажа
+        let targetRotationY = 0;
+        let currentRotationY = 0;
+        const rotationSpeed = 0.3;
+        
+        // Textures
+        let groundTexture = null;
+        let textureLoaded = false;
+        
+        // Sounds
+        let soundsEnabled = true;
+        const jumpSound = document.getElementById('jump-sound');
+        const walkSound = document.getElementById('walk-sound');
+        const danceMusic = document.getElementById('dance-music');
+        let isWalking = false;
+        let walkSoundPlaying = false;
+        
+        // Chat
+        let speechBubbleTimer = null;
+        let chatOpen = false;
+        let controlsEnabled = true;
+        
+        // Новые функции: танец и админ
+        let isDancing = false;
+        let danceTimer = null;
+        let isAdmin = false;
+        let canFly = false;
+        let flyMode = false;
+        
+        // === INITIALIZATION ===
+        init();
+        
+        function init() {
+            // Scene with blue sky
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB);
+            
+            // Camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ 
+                antialias: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            
+            document.body.appendChild(renderer.domElement);
+            
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            
+            const sunLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            sunLight.position.set(200, 400, 200);
+            sunLight.castShadow = true;
+            
+            // Большие тени для всей карты
+            sunLight.shadow.mapSize.width = 4096;
+            sunLight.shadow.mapSize.height = 4096;
+            sunLight.shadow.camera.near = 0.1;
+            sunLight.shadow.camera.far = 600;
+            sunLight.shadow.camera.left = -200;
+            sunLight.shadow.camera.right = 200;
+            sunLight.shadow.camera.top = 200;
+            sunLight.shadow.camera.bottom = -200;
+            sunLight.shadow.bias = -0.0001;
+            sunLight.shadow.normalBias = 0.02;
+            
+            scene.add(sunLight);
+            
+            const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+            fillLight.position.set(-200, 200, -200);
+            scene.add(fillLight);
+            
+            // Load ground texture
+            loadGroundTexture();
+            
+            // Create player
+            createPlayer();
+            
+            // Setup controls
+            setupControls();
+            
+            // Setup UI
+            setupUI();
+            
+            // Mobile controls
+            if (isMobile) {
+                document.getElementById('mobile-controls').style.display = 'flex';
+                document.getElementById('camera-area').style.display = 'block';
+                updateMobileLayout();
+            } else {
+                document.getElementById('mobile-controls').style.display = 'none';
+                document.getElementById('camera-area').style.display = 'none';
+            }
+            
+            // Start game
+            animate();
+            
+            window.addEventListener('resize', onWindowResize);
+            window.addEventListener('orientationchange', updateMobileLayout);
+        }
+        
+        function updateMobileLayout() {
+            if (!isMobile) return;
+            
+            const isPortrait = window.innerHeight > window.innerWidth;
+            const controls = document.getElementById('mobile-controls');
+            
+            if (isPortrait) {
+                controls.style.bottom = '25px';
+                controls.style.padding = '0 15px';
+                
+                const joysticks = document.querySelectorAll('.joystick, .jump-btn');
+                joysticks.forEach(el => {
+                    el.style.width = '85px';
+                    el.style.height = '85px';
+                });
+                
+                const handles = document.querySelectorAll('.joystick-handle');
+                handles.forEach(el => {
+                    el.style.width = '42px';
+                    el.style.height = '42px';
+                    el.style.top = '21.5px';
+                    el.style.left = '21.5px';
+                });
+            } else {
+                controls.style.bottom = '15px';
+                controls.style.padding = '0 12px';
+                
+                const joysticks = document.querySelectorAll('.joystick, .jump-btn');
+                joysticks.forEach(el => {
+                    el.style.width = '75px';
+                    el.style.height = '75px';
+                });
+                
+                const handles = document.querySelectorAll('.joystick-handle');
+                handles.forEach(el => {
+                    el.style.width = '37px';
+                    el.style.height = '37px';
+                    el.style.top = '19px';
+                    el.style.left = '19px';
+                });
+            }
+        }
+        
+        function loadGroundTexture() {
+            const textureLoader = new THREE.TextureLoader();
+            textureLoader.crossOrigin = "anonymous";
+            
+            textureLoader.load(
+                'https://static.vecteezy.com/system/resources/previews/046/929/662/non_2x/green-plastic-toy-baseplate-background-with-grid-of-circular-studs-square-banner-backdrop-vector.jpg',
+                function(texture) {
+                    groundTexture = texture;
+                    groundTexture.wrapS = THREE.RepeatWrapping;
+                    groundTexture.wrapT = THREE.RepeatWrapping;
+                    groundTexture.repeat.set(20, 20);
+                    textureLoaded = true;
+                    createWorld();
+                },
+                undefined,
+                function(err) {
+                    console.log('Texture loading error, using color');
+                    textureLoaded = true;
+                    createWorld();
+                }
+            );
+        }
+        
+        function createWorld() {
+            // ТОЛЬКО БОЛЬШАЯ ЗЕМЛЯ
+            const groundGeometry = new THREE.BoxGeometry(300, 2, 300);
+            const groundMaterial = new THREE.MeshLambertMaterial({ 
+                color: 0x00aa00,
+                map: groundTexture || null
+            });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.position.y = 1;
+            ground.receiveShadow = true;
+            ground.castShadow = true;
+            scene.add(ground);
+            
+            // Collisions для земли
+            ground.userData = {
+                width: 300,
+                height: 2,
+                depth: 300,
+                top: 2,
+                bottom: 0,
+                position: ground.position
+            };
+            platforms.push(ground);
+            
+            // Player
+            playerGroup.position.set(0, 4, 0);
+            onGround = true;
+        }
+        
+        function createPlayer() {
+            playerGroup = new THREE.Group();
+            
+            const skin = new THREE.MeshLambertMaterial({ color: 0xffcd38 });
+            const shirt = new THREE.MeshLambertMaterial({ color: 0x3366cc });
+            const pants = new THREE.MeshLambertMaterial({ color: 0x8b4513 });
+            
+            // Body
+            const torsoMesh = new THREE.Mesh(new THREE.BoxGeometry(2, 2, 1), shirt);
+            torsoMesh.position.y = 1;
+            torsoMesh.castShadow = true;
+            playerGroup.add(torsoMesh);
+            
+            // Head
+            const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.8, 16, 16), skin);
+            headMesh.position.y = 2.6;
+            headMesh.castShadow = true;
+            playerGroup.add(headMesh);
+            
+            // Body parts
+            const createPart = (w, h, d, mat, y, name) => {
+                const geo = new THREE.BoxGeometry(w, h, d);
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.castShadow = true;
+                const group = new THREE.Group();
+                group.position.y = y;
+                mesh.position.y = -h / 2;
+                group.add(mesh);
+                parts[name] = group;
+                return group;
+            };
+            
+            const armL = createPart(1, 2, 1, skin, 2, 'armL');
+            armL.position.x = -1.5;
+            const armR = createPart(1, 2, 1, skin, 2, 'armR');
+            armR.position.x = 1.5;
+            const legL = createPart(1, 2, 1, pants, 0, 'legL');
+            legL.position.x = -0.5;
+            const legR = createPart(1, 2, 1, pants, 0, 'legR');
+            legR.position.x = 0.5;
+            
+            playerGroup.add(armL, armR, legL, legR);
+            playerGroup.castShadow = true;
+            playerGroup.receiveShadow = true;
+            scene.add(playerGroup);
+        }
+        
+        // === PHYSICS ===
+        function updatePhysics() {
+            if (!textureLoaded) return;
+            
+            // Режим полета (админ)
+            if (flyMode && isAdmin) {
+                velocity.y = 0;
+                playerGroup.position.y += velocity.y;
+                onGround = false;
+                return;
+            }
+            
+            velocity.y -= gravity;
+            playerGroup.position.y += velocity.y;
+            
+            checkPlatformCollision();
+            
+            if (playerGroup.position.y < -20) {
+                respawn();
+            }
+        }
+        
+        function checkPlatformCollision() {
+            onGround = false;
+            const playerPos = playerGroup.position;
+            const playerRadius = 0.8;
+            const playerHeight = 4;
+            const playerBottom = playerPos.y - playerHeight / 2;
+            
+            for (let platform of platforms) {
+                const data = platform.userData;
+                const platformPos = platform.position;
+                
+                const dx = Math.abs(playerPos.x - platformPos.x);
+                const dz = Math.abs(playerPos.z - platformPos.z);
+                
+                if (dx < (data.width / 2 + playerRadius) && dz < (data.depth / 2 + playerRadius)) {
+                    if (playerBottom <= data.top + 0.1 && playerBottom >= data.top - 0.5 && velocity.y <= 0) {
+                        onGround = true;
+                        velocity.y = 0;
+                        playerGroup.position.y = data.top + playerHeight / 2;
+                        break;
+                    }
+                }
+            }
+        }
+        
+        function updateMovement() {
+            if (!textureLoaded) return;
+            
+            let move = false;
+            const speed = 0.15;
+            let dx = 0, dz = 0;
+            
+            // УПРАВЛЕНИЕ НА ПК (блокировка только при controlsEnabled = false)
+            if (!isMobile) {
+                const forwardX = -Math.sin(cameraAngleX);
+                const forwardZ = -Math.cos(cameraAngleX);
+                const rightX = Math.cos(cameraAngleX);
+                const rightZ = -Math.sin(cameraAngleX);
+                
+                let inputForward = 0;
+                let inputRight = 0;
+                
+                if (keys.w && controlsEnabled) { 
+                    inputForward += 1;
+                    move = true; 
+                }
+                if (keys.s && controlsEnabled) { 
+                    inputForward -= 1;
+                    move = true; 
+                }
+                if (keys.a && controlsEnabled) { 
+                    inputRight -= 1;
+                    move = true; 
+                }
+                if (keys.d && controlsEnabled) { 
+                    inputRight += 1;
+                    move = true; 
+                }
+                
+                const inputLength = Math.sqrt(inputForward * inputForward + inputRight * inputRight);
+                if (inputLength > 1) {
+                    inputForward /= inputLength;
+                    inputRight /= inputLength;
+                }
+                
+                dx = forwardX * inputForward + rightX * inputRight;
+                dz = forwardZ * inputForward + rightZ * inputRight;
+            }
+            
+            // Joystick movement на мобильных
+            if (joystickActive && isMobile && controlsEnabled) {
+                const forwardX = -Math.sin(cameraAngleX);
+                const forwardZ = -Math.cos(cameraAngleX);
+                const rightX = Math.cos(cameraAngleX);
+                const rightZ = -Math.sin(cameraAngleX);
+                
+                dx += forwardX * joystickVector.y + rightX * joystickVector.x;
+                dz += forwardZ * joystickVector.y + rightZ * joystickVector.x;
+                
+                if (Math.abs(joystickVector.x) > 0.1 || Math.abs(joystickVector.y) > 0.1) {
+                    move = true;
+                }
+            }
+            
+            // Apply movement
+            if (move) {
+                const length = Math.sqrt(dx * dx + dz * dz);
+                if (length > 0) {
+                    dx = (dx / length) * speed;
+                    dz = (dz / length) * speed;
+                }
+                
+                playerGroup.position.x += dx;
+                playerGroup.position.z += dz;
+                
+                // Быстрый поворот персонажа
+                if (dx !== 0 || dz !== 0) {
+                    targetRotationY = Math.atan2(-dx, -dz);
+                    
+                    const angleDiff = targetRotationY - currentRotationY;
+                    let normalizedDiff = ((angleDiff + Math.PI) % (2 * Math.PI)) - Math.PI;
+                    
+                    currentRotationY += normalizedDiff * rotationSpeed;
+                    playerGroup.rotation.y = currentRotationY;
+                }
+                
+                // Управление звуком ходьбы
+                if (onGround && !isWalking && !isDancing) {
+                    startWalkingSound();
+                }
+                
+                if (onGround && Date.now() - lastStepTime > stepInterval) {
+                    lastStepTime = Date.now();
+                }
+            } else {
+                // Остановка звука ходьбы при остановке
+                if (isWalking && !isDancing) {
+                    stopWalkingSound();
+                }
+            }
+            
+            updateAnimation(move);
+        }
+        
+        // === ТАНЕЦ (ИСПРАВЛЕННАЯ ВЕРСИЯ) ===
+        function startDance() {
+            if (isDancing) {
+                // Если уже танцуем, останавливаем танец
+                stopDance();
+                return;
+            }
+            
+            isDancing = true;
+            showSpeechBubble("Dancing!");
+            
+            // Воспроизведение музыки если есть
+            if (soundsEnabled && danceMusic) {
+                try {
+                    danceMusic.currentTime = 0;
+                    danceMusic.play().catch(e => console.log("Dance music error:", e));
+                } catch(e) {
+                    console.log("Dance music error:", e);
+                }
+            }
+            
+            // Танец длится 10 секунд, потом автоматически останавливается
+            danceTimer = setTimeout(() => {
+                stopDance();
+            }, 10000);
+        }
+        
+        function stopDance() {
+            isDancing = false;
+            if (danceTimer) {
+                clearTimeout(danceTimer);
+                danceTimer = null;
+            }
+            
+            // Остановка музыки
+            if (danceMusic) {
+                danceMusic.pause();
+                danceMusic.currentTime = 0;
+            }
+            
+            // Показываем что танец закончился
+            showSpeechBubble("Stopped dancing");
+        }
+        
+        function updateDanceAnimation() {
+            if (!isDancing) return;
+            
+            const t = Date.now() * 0.01;
+            
+            // МЕДЛЕННЫЙ ПОВОРОТ ВСЕГО ТЕЛА ПО СТОРОНАМ
+            playerGroup.rotation.y = Math.sin(t * 0.5) * 0.5;
+            
+            // НОГИ: реже и медленнее
+            animTarget.legL = Math.sin(t * 1.5) * 0.4;
+            animTarget.legR = -Math.sin(t * 1.5) * 0.4;
+            
+            // РУКИ: медленно крутятся в разные стороны
+            const armSpeed = 1.2;
+            const armAngle = t * armSpeed;
+            
+            animTarget.armL = Math.sin(armAngle) * 1.5;
+            animTarget.armR = Math.cos(armAngle + Math.PI) * 1.5;
+            
+            // Быстрая интерполяция для плавного танца
+            animCurrent.legL = animTarget.legL;
+            animCurrent.legR = animTarget.legR;
+            animCurrent.armL = animTarget.armL;
+            animCurrent.armR = animTarget.armR;
+            
+            if (parts.legL) parts.legL.rotation.x = animCurrent.legL;
+            if (parts.legR) parts.legR.rotation.x = animCurrent.legR;
+            if (parts.armL) parts.armL.rotation.x = animCurrent.armL;
+            if (parts.armR) parts.armR.rotation.x = animCurrent.armR;
+        }
+        
+        // === АДМИН РЕЖИМ ===
+        function activateAdminMode() {
+            isAdmin = true;
+            canFly = true;
+            showSpeechBubble("Admin mode activated");
+            
+            // Добавляем новые клавиши для админа
+            document.addEventListener('keydown', handleAdminKeys);
+        }
+        
+        function handleAdminKeys(e) {
+            if (!isAdmin) return;
+            
+            // F - включить/выключить полет
+            if (e.code === 'KeyF') {
+                flyMode = !flyMode;
+                showSpeechBubble(flyMode ? "Fly: ON" : "Fly: OFF");
+            }
+            
+            // G - супер прыжок
+            if (e.code === 'KeyG' && onGround && controlsEnabled) {
+                velocity.y = jumpForce * 3;
+                playJumpSound();
+                showSpeechBubble("Super jump");
+            }
+        }
+        
+        function startWalkingSound() {
+            if (soundsEnabled && !walkSoundPlaying && !isDancing) {
+                try {
+                    walkSound.currentTime = 0;
+                    walkSound.play().catch(e => console.log("Walk sound error:", e));
+                    walkSoundPlaying = true;
+                    isWalking = true;
+                } catch(e) {
+                    console.log("Walk sound error:", e);
+                }
+            }
+        }
+        
+        function stopWalkingSound() {
+            if (walkSoundPlaying) {
+                walkSound.pause();
+                walkSoundPlaying = false;
+                isWalking = false;
+            }
+        }
+        
+        function updateAnimation(isMoving) {
+            if (isDancing) {
+                updateDanceAnimation();
+                return;
+            }
+            
+            if (!onGround) {
+                animTarget = { legL: -0.2, legR: 0.2, armL: 3.14, armR: 3.14 };
+            } else if (isMoving) {
+                const t = Date.now() * 0.01;
+                animTarget = { 
+                    legL: Math.sin(t), legR: -Math.sin(t), 
+                    armL: -Math.sin(t), armR: Math.sin(t) 
+                };
+            } else {
+                animTarget = { legL: 0, legR: 0, armL: 0, armR: 0 };
+            }
+            
+            const lerp = (start, end, amt) => (1 - amt) * start + amt * end;
+            
+            animCurrent.legL = lerp(animCurrent.legL, animTarget.legL, animSpeed);
+            animCurrent.legR = lerp(animCurrent.legR, animTarget.legR, animSpeed);
+            animCurrent.armL = lerp(animCurrent.armL, animTarget.armL, animSpeed);
+            animCurrent.armR = lerp(animCurrent.armR, animTarget.armR, animSpeed);
+            
+            if (parts.legL) parts.legL.rotation.x = animCurrent.legL;
+            if (parts.legR) parts.legR.rotation.x = animCurrent.legR;
+            if (parts.armL) parts.armL.rotation.x = animCurrent.armL;
+            if (parts.armR) parts.armR.rotation.x = animCurrent.armR;
+        }
+        
+        function updateCamera() {
+            if (!textureLoaded) return;
+            
+            const heightOffset = 4;
+            camera.position.x = playerGroup.position.x + Math.sin(cameraAngleX) * cameraDistance * Math.cos(cameraAngleY);
+            camera.position.z = playerGroup.position.z + Math.cos(cameraAngleX) * cameraDistance * Math.cos(cameraAngleY);
+            camera.position.y = playerGroup.position.y + heightOffset + Math.sin(cameraAngleY) * cameraDistance;
+            
+            camera.lookAt(
+                playerGroup.position.x,
+                playerGroup.position.y + 2,
+                playerGroup.position.z
+            );
+            
+            updateSpeechBubble();
+        }
+        
+        function updateSpeechBubble() {
+            const bubble = document.getElementById('speech-bubble');
+            if (bubble.style.display === 'block') {
+                const playerPos = new THREE.Vector3(
+                    playerGroup.position.x,
+                    playerGroup.position.y + 4,
+                    playerGroup.position.z
+                );
+                
+                playerPos.project(camera);
+                
+                const x = (playerPos.x * 0.5 + 0.5) * window.innerWidth;
+                const y = (-playerPos.y * 0.5 + 0.5) * window.innerHeight;
+                
+                bubble.style.left = (x - bubble.offsetWidth / 2) + 'px';
+                bubble.style.top = (y - 50) + 'px';
+            }
+        }
+        
+        function respawn() {
+            playerGroup.position.set(0, 4, 0);
+            playerGroup.rotation.y = 0;
+            currentRotationY = 0;
+            targetRotationY = 0;
+            velocity = { x: 0, y: 0, z: 0 };
+            onGround = true;
+            flyMode = false;
+        }
+        
+        // === CONTROLS ===
+        function setupControls() {
+            // Keyboard controls
+            document.addEventListener('keydown', e => {
+                // Enter для чата всегда работает
+                if (e.code === 'Enter') {
+                    if (document.getElementById('chat-input') !== document.activeElement) {
+                        toggleChat();
+                        if (document.getElementById('chat-container').style.display === 'block') {
+                            document.getElementById('chat-input').focus();
+                        }
+                    }
+                }
+                
+                // ESC для меню всегда работает
+                if (e.code === 'Escape') {
+                    toggleMenu();
+                }
+                
+                // Остальные клавиши только если управление разрешено
+                if (!controlsEnabled) return;
+                
+                if (e.code === 'KeyW') keys.w = true;
+                if (e.code === 'KeyS') keys.s = true;
+                if (e.code === 'KeyA') keys.a = true;
+                if (e.code === 'KeyD') keys.d = true;
+                if (e.code === 'Space' && onGround && !flyMode) {
+                    velocity.y = jumpForce;
+                    playJumpSound();
+                }
+            });
+            
+            document.addEventListener('keyup', e => {
+                // Эти клавиши только если управление разрешено
+                if (!controlsEnabled) return;
+                
+                if (e.code === 'KeyW') keys.w = false;
+                if (e.code === 'KeyS') keys.s = false;
+                if (e.code === 'KeyA') keys.a = false;
+                if (e.code === 'KeyD') keys.d = false;
+            });
+            
+            // Mouse wheel for zoom
+            document.addEventListener('wheel', e => {
+                if (!controlsEnabled) return;
+                e.preventDefault();
+                cameraDistance += e.deltaY * 0.01;
+                cameraDistance = Math.max(minCameraDistance, Math.min(maxCameraDistance, cameraDistance));
+            }, { passive: false });
+            
+            // Mouse controls for PC
+            if (!isMobile) {
+                document.addEventListener('mousedown', e => {
+                    if (!controlsEnabled) return;
+                    if (e.button === 2) {
+                        isRightMouseDown = true;
+                        lastMouseX = e.clientX;
+                        lastMouseY = e.clientY;
+                        document.body.style.cursor = 'none';
+                    }
+                });
+                
+                document.addEventListener('mouseup', e => {
+                    if (e.button === 2) {
+                        isRightMouseDown = false;
+                        document.body.style.cursor = 'default';
+                    }
+                });
+                
+                document.addEventListener('mousemove', e => {
+                    if (!controlsEnabled) return;
+                    if (isRightMouseDown) {
+                        const deltaX = e.clientX - lastMouseX;
+                        const deltaY = e.clientY - lastMouseY;
+                        
+                        cameraAngleX -= deltaX * cameraSensitivity;
+                        cameraAngleY += deltaY * cameraSensitivity;
+                        cameraAngleY = Math.max(-Math.PI/2, Math.min(Math.PI/3, cameraAngleY));
+                        
+                        lastMouseX = e.clientX;
+                        lastMouseY = e.clientY;
+                    }
+                });
+                
+                document.addEventListener('contextmenu', e => e.preventDefault());
+            }
+            
+            // Mobile controls
+            if (isMobile) {
+                setupMobileControls();
+            }
+        }
+        
+        function setupMobileControls() {
+            const joystickBase = document.getElementById('joystickBase');
+            const joystickHandle = document.getElementById('joystickHandle');
+            const jumpBtn = document.getElementById('jumpBtn');
+            const cameraArea = document.getElementById('camera-area');
+            
+            let touchId = null;
+            const maxDistance = 40;
+            
+            // Джойстик для движения
+            joystickBase.addEventListener('touchstart', (e) => {
+                if (!controlsEnabled) return;
+                e.preventDefault();
+                const touch = e.touches[0];
+                touchId = touch.identifier;
+                joystickActive = true;
+            }, { passive: false });
+            
+            joystickBase.addEventListener('touchmove', (e) => {
+                if (!controlsEnabled || !touchId) return;
+                e.preventDefault();
+                
+                for (let touch of e.changedTouches) {
+                    if (touch.identifier === touchId) {
+                        const rect = joystickBase.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+                        
+                        let deltaX = touch.clientX - centerX;
+                        let deltaY = touch.clientY - centerY;
+                        
+                        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                        if (distance > maxDistance) {
+                            deltaX = (deltaX / distance) * maxDistance;
+                            deltaY = (deltaY / distance) * maxDistance;
+                        }
+                        
+                        joystickVector.x = deltaX / maxDistance;
+                        joystickVector.y = deltaY / maxDistance;
+                        
+                        joystickHandle.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+                        break;
+                    }
+                }
+            }, { passive: false });
+            
+            joystickBase.addEventListener('touchend', (e) => {
+                for (let touch of e.changedTouches) {
+                    if (touch.identifier === touchId) {
+                        joystickActive = false;
+                        joystickVector = { x: 0, y: 0 };
+                        joystickHandle.style.transform = 'translate(0, 0)';
+                        touchId = null;
+                        break;
+                    }
+                }
+            });
+            
+            // Кнопка прыжка
+            jumpBtn.addEventListener('touchstart', (e) => {
+                if (!controlsEnabled) return;
+                e.preventDefault();
+                if (onGround && !flyMode) {
+                    velocity.y = jumpForce;
+                    playJumpSound();
+                    jumpBtn.style.background = '#222';
+                }
+            }, { passive: false });
+            
+            jumpBtn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                jumpBtn.style.background = '#333';
+            }, { passive: false });
+            
+            // Вращение камеры свайпом
+            cameraArea.addEventListener('touchstart', (e) => {
+                if (!controlsEnabled) return;
+                e.preventDefault();
+                if (e.touches.length === 1) {
+                    cameraTouchId = e.touches[0].identifier;
+                    cameraTouchStartX = e.touches[0].clientX;
+                    cameraTouchStartY = e.touches[0].clientY;
+                }
+            }, { passive: false });
+            
+            cameraArea.addEventListener('touchmove', (e) => {
+                if (!controlsEnabled) return;
+                e.preventDefault();
+                
+                if (cameraTouchId !== null) {
+                    for (let i = 0; i < e.touches.length; i++) {
+                        if (e.touches[i].identifier === cameraTouchId) {
+                            const deltaX = e.touches[i].clientX - cameraTouchStartX;
+                            const deltaY = e.touches[i].clientY - cameraTouchStartY;
+                            
+                            const mobileSensitivity = 0.005;
+                            
+                            cameraAngleX -= deltaX * mobileSensitivity;
+                            cameraAngleY += deltaY * mobileSensitivity;
+                            cameraAngleY = Math.max(-Math.PI/2, Math.min(Math.PI/3, cameraAngleY));
+                            
+                            cameraTouchStartX = e.touches[i].clientX;
+                            cameraTouchStartY = e.touches[i].clientY;
+                            break;
+                        }
+                    }
+                }
+                
+                if (e.touches.length === 2) {
+                    const touch1 = e.touches[0];
+                    const touch2 = e.touches[1];
+                    
+                    const currentDistance = getTouchDistance(touch1, touch2);
+                    
+                    if (initialPinchDistance === 0) {
+                        initialPinchDistance = currentDistance;
+                    } else {
+                        const delta = (initialPinchDistance - currentDistance) * 0.01;
+                        cameraDistance += delta;
+                        cameraDistance = Math.max(minCameraDistance, Math.min(maxCameraDistance, cameraDistance));
+                        initialPinchDistance = currentDistance;
+                    }
+                }
+            }, { passive: false });
+            
+            cameraArea.addEventListener('touchend', (e) => {
+                for (let touch of e.changedTouches) {
+                    if (touch.identifier === cameraTouchId) {
+                        cameraTouchId = null;
+                    }
+                }
+                initialPinchDistance = 0;
+            });
+            
+            function getTouchDistance(touch1, touch2) {
+                const dx = touch1.clientX - touch2.clientX;
+                const dy = touch1.clientY - touch2.clientY;
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+        }
+        
+        // === UI ===
+        function setupUI() {
+            document.getElementById('menu-btn').addEventListener('click', toggleMenu);
+            document.getElementById('chat-btn').addEventListener('click', toggleChat);
+            document.getElementById('chat-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        }
+        
+        function toggleMenu() {
+            const menu = document.getElementById('game-menu');
+            if (menu.style.display === 'block') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'block';
+                if (chatOpen) {
+                    document.getElementById('chat-container').style.display = 'none';
+                    chatOpen = false;
+                    controlsEnabled = true;
+                }
+            }
+        }
+        
+        function toggleChat() {
+            const chat = document.getElementById('chat-container');
+            if (chatOpen) {
+                // Закрыть чат - ВКЛЮЧАЕМ УПРАВЛЕНИЕ
+                chat.style.display = 'none';
+                chatOpen = false;
+                controlsEnabled = true;
+            } else {
+                // Открыть чат - ВЫКЛЮЧАЕМ УПРАВЛЕНИЕ
+                chat.style.display = 'block';
+                chatOpen = true;
+                controlsEnabled = false;
+                document.getElementById('chat-input').focus();
+                document.getElementById('game-menu').style.display = 'none';
+            }
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                // Проверка команд
+                if (message === '/dance') {
+                    startDance();
+                    input.value = '';
+                    return;
+                } else if (message === '/admin333') {
+                    activateAdminMode();
+                    input.value = '';
+                    return;
+                }
+                
+                // Обычное сообщение - отправляем в чат и показываем над головой
+                addChatMessage('Player', message);
+                showSpeechBubble(message);
+                input.value = '';
+            }
+        }
+        
+        function addChatMessage(author, text) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
+            messageDiv.innerHTML = `<span class="message-author">${author}:</span> ${text}`;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function showSpeechBubble(text) {
+            const bubble = document.getElementById('speech-bubble');
+            bubble.textContent = text;
+            bubble.style.display = 'block';
+            
+            if (speechBubbleTimer) {
+                clearTimeout(speechBubbleTimer);
+            }
+            speechBubbleTimer = setTimeout(() => {
+                bubble.style.display = 'none';
+            }, 3000);
+        }
+        
+        function playJumpSound() {
+            if (soundsEnabled) {
+                try {
+                    jumpSound.currentTime = 0;
+                    jumpSound.play().catch(e => console.log("Jump sound error:", e));
+                } catch(e) {
+                    console.log("Jump sound error:", e);
+                }
+            }
+        }
+        
+        // === MENU ===
+        function resumeGame() {
+            document.getElementById('game-menu').style.display = 'none';
+        }
+        
+        function openSettings() {
+            alert('SETTINGS\n\nSound: ' + (soundsEnabled ? 'ON' : 'OFF') + '\nDevice: ' + (isMobile ? 'MOBILE' : 'PC') + '\n\nPC CONTROLS:\nW - forward\nS - backward (with fast turn)\nA - left\nD - right\nSpace - jump\nRMB - rotate camera\nMouse wheel - zoom\nESC - menu\nEnter - open/close chat\n\nCHAT COMMANDS:\n/dance - dance for 10 seconds (toggle)\n/admin333 - admin mode (fly, super jump)\n\nADMIN CONTROLS (if activated):\nF - toggle fly mode\nG - super jump');
+        }
+        
+        function showHelp() {
+            alert('HELP\n\nMove on the green area\nUse chat to communicate\nPress Enter to open chat\nPress ESC for menu\n\nChat commands:\n/dance - toggle dance animation (10 seconds)\n/admin333 - activate admin mode');
+        }
+        
+        function quitGame() {
+            if (confirm('Quit game?')) {
+                window.close();
+            }
+        }
+        
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            if (isMobile) {
+                updateMobileLayout();
+            }
+        }
+        
+        // === MAIN LOOP ===
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            if (textureLoaded) {
+                updatePhysics();
+                updateMovement();
+                updateCamera();
+            }
+            
+            renderer.render(scene, camera);
+        }
+    </script>
+</body>
+</html>
