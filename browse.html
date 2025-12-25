@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse - Rowex</title>
+    <style>
+        body {
+            background: white;
+            font-size: 12px;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+        }
+
+        h1 {
+            font-weight: normal;
+            font-size: 24px;
+        }
+
+        h2 {
+            font-weight: normal;
+        }
+
+        img {
+            max-width:100%; 
+            height: auto;
+        }
+
+        .contents {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+        }
+
+        .banner {
+            background-image: url("/images/banner.png");
+            height: 72px;
+            text-align: center;
+            vertical-align: middle;
+            border-bottom: solid 1px black;
+            border-left: solid 1px black;
+            border-right: solid 1px black;
+        }
+
+        .navigation {
+            background-color: #6e99c9;
+            border-bottom: solid 1px black;
+            margin-bottom: 8px;
+            border-left: solid 1px black;
+            border-right: solid 1px black;
+            font-size: 14pt;
+            line-height: 2em;
+            text-align: center;
+            color: white;
+        }
+
+        .navigation a:link {
+            color: white;
+        }
+
+        .navigation a:visited {
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+        }
+
+        .browseTable {
+            border-collapse: collapse;
+            margin-bottom: 0px;
+            background-color:"White";
+            border-color:"#CCCCCC";
+            border-width:1px;
+            border-style:solid;
+        }
+
+        .browseHeader {
+            background-color: #6e99c9;
+            color: white;
+        }
+
+        .profileDiv {
+            width: 100%;
+            height: 100%;
+            background-color: lightsteelblue;
+            border-top: solid 1px black;
+            border-bottom: solid 1px black;
+            border-left: solid 1px black;
+            border-right: solid 1px black;
+            font-size: 14pt;
+            text-align: center;
+            padding-top: 2px;
+            padding-right: 2px;
+            padding-bottom: 2px;
+            padding-left: 2px;
+        }
+
+        .profileDesc {
+            font-size: 9pt;
+        }
+
+        .Button {
+            cursor: pointer;
+            background-color: #fff;
+            border: solid 1px #333;
+            color: #333;
+            font-family: Verdana, Sans-Serif;
+            font-size: 0.9em;
+            text-decoration: none;
+        }
+
+        .Button:link, .Button:visited {
+            border: solid 1px #777;
+            color: #777;
+        }
+
+        .Button:hover, .Button:active {
+            background-color: #6e99c9;
+            border: solid 1px #000;
+            color: #fff;
+        }
+
+        .thumbnailIcon {
+            object-fit: cover;
+            width: 120px;
+            height: 70px;
+            padding: 2px;
+        }
+
+        select:disabled {
+            display: none
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function GetParameterValues(param) {
+            var url = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < url.length; i++) {
+                var urlparam = url[i].split('=');
+                if (urlparam[0] == param) {
+                    return urlparam[1];
+                }
+            }
+        }
+
+        const CATEGORY_PLACES = 0
+        const CATEGORY_GODOBLOCKS = 1
+
+        var sort = "addasc";
+        var search = "";
+        var tag = "";
+        var page = 1;
+        var category = CATEGORY_PLACES;
+        var categoryString = "places"
+        var categoryStringItemPage = "place"
+
+        if (typeof GetParameterValues("category") != "undefined"){
+            category = GetParameterValues("category");
+        }
+        if (category == CATEGORY_PLACES) {
+            categoryString = "places"
+            categoryStringItemPage = "place"
+        } else if (category == CATEGORY_GODOBLOCKS) {
+            categoryString = "godoblocks"
+            categoryStringItemPage = "minigame"
+        }
+
+        $(document).ready(function() {
+            $.getJSON('data/' + categoryString + '.json', function(data) {
+                let places = data.places;
+                
+                document.getElementById("category").value = category;
+                updateTags();
+                
+                if (typeof GetParameterValues("page") != "undefined"){
+                    page = GetParameterValues("page");
+                }
+                if (typeof GetParameterValues("sort") != "undefined"){
+                    sort = GetParameterValues("sort");
+                    document.getElementById("sort").value = sort
+                }
+                if (typeof GetParameterValues("search") != "undefined"){
+                    search = decodeURIComponent(GetParameterValues("search")).replace("+", " ");
+                    document.getElementById("search").value = search
+                }
+                if (typeof GetParameterValues("tag") != "undefined"){
+                    tag = decodeURIComponent(GetParameterValues("tag")).replace("+", " ");
+                    if (category==CATEGORY_PLACES){ document.getElementById("tag_places").value = tag };
+                    if (category==CATEGORY_GODOBLOCKS){ document.getElementById("tag_godoblocks").value = tag };
+                }
+                
+                if (sort == "addasc") {
+                    places.reverse();
+                }
+                if (sort == "new") {
+                    places.sort((a, b) => new Date(b.released) - new Date(a.released));
+                }
+                if (sort == "old") {
+                    places.sort((a, b) => new Date(a.released) - new Date(b.released));
+                }
+                if (tag != "") {
+                    places = places.filter(word => word.tag.toLowerCase().indexOf(tag.toLowerCase()) > -1);
+                }
+                
+                places = places.filter(word => word.name.toLowerCase().indexOf(search.toLowerCase()) > -1);
+                
+                if (places.length == 0) {
+                    document.getElementById("browseTable").style = "display:none;"
+                    document.getElementById("notfound").style = "display:block;"
+                }
+                
+                const dateFormat = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                
+                for (let i = page*10-10; i < page*10; i++) {
+                    if (i >= places.length) { break; }
+                    
+                    let released = new Date(places[i].released)
+                    document.getElementById("places").innerHTML += 
+                        "<tr><td><a href='" + categoryStringItemPage + ".html?id=" + places[i].id + "'><img class='thumbnailIcon' src='" + places[i].thumbnail + "' alt='thumbnail'></a></td>" +
+                        "<td><a href='" + categoryStringItemPage + ".html?id=" + places[i].id + "'>" + places[i].name + "</a></td>" +
+                        "<td>" + places[i].author + "</td>" +
+                        "<td>" + released.toLocaleDateString('en-us', dateFormat) + "</td></tr>";
+                }
+                
+                document.getElementById("places").innerHTML += "<tr width=100% style='text-align:center;'><td colspan=4 id='pages'></td></tr>"
+                for (let i = 1; i < Math.ceil(places.length/10)+1; i++) {
+                    if (page != i) {
+                        document.getElementById("pages").innerHTML += 
+                            "<a href='?page=" + i + "&search=" + search + "&sort=" + sort + "&tag=" + tag + "&category=" + category + "'>" + i + "</a>&nbsp;";
+                    } else {
+                        document.getElementById("pages").innerHTML += i + "&nbsp;";
+                    }
+                }
+            }).fail(function(){
+                document.getElementById("places").innerHTML = "Oops! Something has gone wrong!"
+            });
+        });
+
+        function updateTags() {
+            let newCategory = document.getElementById("category").value;
+            if (newCategory == 0){
+                document.getElementById("tag_places").disabled = false;
+                document.getElementById("tag_godoblocks").disabled = true;
+            } else if (newCategory == 1) {
+                document.getElementById("tag_godoblocks").disabled = false;
+                document.getElementById("tag_places").disabled = true;
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="contents">
+        <!-- Встроенный хедер -->
+        <div width=100% height=72px class="banner">
+            <img src="/images/logo.png" alt="Rowex Logo">
+        </div>
+
+        <div width=100% class="navigation">
+            <a href="index.html">Home</a> | 
+            <a href="games.html">Games</a> | 
+            <a href="browse.html">Browse</a> | 
+            <a href="info.html">Info</a>
+        </div>
+        
+        <h1>Browse</h1>
+        <p><form autocomplete="off" id="browseForm" action="browse.html?">
+            <input type="text" name="search" id="search" size=32 placeholder="Search">
+            <select name="sort" id="sort">
+                <option value="addasc">Recently Added (Ascending)</option>
+                <option value="adddesc">Recently Added (Descending)</option>
+                <option value="new">Newest Places</option>
+                <option value="old">Oldest Places</option>
+            </select>
+            <select name="tag" id="tag_places">
+                <option value="">No Tag</option>
+                <option value="fighting">Fighting</option>
+                <option value="builds">Builds</option>
+                <option value="model usage">Model Usage</option>
+                <option value="scripting">Scripting</option>
+                <option value="starter places">Starter Places</option>
+                <option value="obstacle courses">Obstacle Courses</option>
+            </select>
+            <select disabled name="tag" id="tag_godoblocks">
+                <option value="">No Tag</option>
+                <option value="minigames">Minigames</option>
+                <option value="builds">Builds</option>
+                <option value="tests">Developer Tests</option>
+            </select>
+            <select name="category" id="category" onchange="updateTags()">
+                <option value=0>Rowex Places</option>
+                <option value=1>GodoBlocks Games</option>
+            </select>
+            <input type="hidden" name="page" id="page" value=1>
+            <input type="submit" value="Search">
+        </form></p>
+        <p style="display:none;" id="notfound">No places could be found with your search.</p>
+        <table id="browseTable" class="browseTable" width=100% border=1 cellspacing=0 rules="rows">
+            <tbody id="places">
+                <tr class="browseHeader">
+                    <td width=140px>Places</td>
+                    <td width=30%>Name</td>
+                    <td>Author</td>
+                    <td>Date</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Встроенный футер -->
+        <hr>
+        <div class="footer">
+            <small>
+                <a href="https://rowex.neocities.org">Rowex</a> originally created by 
+                <a href="https://soikon.neocities.org">Soikon</a>. Check out the <a href="https://github.com/SoikonDevs/Rowex-Website">Source Code</a> on GitHub. 
+                "Online Play Toy"
+            </small>
+        </div>
+    </div>
+</body>
+</html>
