@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Games - Rowex</title>
+    <style>
+        body {
+            background: white;
+            font-size: 12px;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+        }
+
+        h1 {
+            font-weight: normal;
+            font-size: 24px;
+        }
+
+        h2 {
+            font-weight: normal;
+        }
+
+        img {
+            max-width:100%; 
+            height: auto;
+        }
+
+        .contents {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+        }
+
+        .banner {
+            background-image: url("/images/banner.png");
+            height: 72px;
+            text-align: center;
+            vertical-align: middle;
+            border-bottom: solid 1px black;
+            border-left: solid 1px black;
+            border-right: solid 1px black;
+        }
+
+        .navigation {
+            background-color: #6e99c9;
+            border-bottom: solid 1px black;
+            margin-bottom: 8px;
+            border-left: solid 1px black;
+            border-right: solid 1px black;
+            font-size: 14pt;
+            line-height: 2em;
+            text-align: center;
+            color: white;
+        }
+
+        .navigation a:link {
+            color: white;
+        }
+
+        .navigation a:visited {
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+        }
+
+        .browseTable {
+            border-collapse: collapse;
+            margin-bottom: 0px;
+            background-color:"White";
+            border-color:"#CCCCCC";
+            border-width:1px;
+            border-style:solid;
+        }
+
+        .browseHeader {
+            background-color: #6e99c9;
+            color: white;
+        }
+
+        .profileDiv {
+            width: 100%;
+            height: 100%;
+            background-color: lightsteelblue;
+            border-top: solid 1px black;
+            border-bottom: solid 1px black;
+            border-left: solid 1px black;
+            border-right: solid 1px black;
+            font-size: 14pt;
+            text-align: center;
+            padding-top: 2px;
+            padding-right: 2px;
+            padding-bottom: 2px;
+            padding-left: 2px;
+        }
+
+        .profileDesc {
+            font-size: 9pt;
+        }
+
+        .Button {
+            cursor: pointer;
+            background-color: #fff;
+            border: solid 1px #333;
+            color: #333;
+            font-family: Verdana, Sans-Serif;
+            font-size: 0.9em;
+            text-decoration: none;
+        }
+
+        .Button:link, .Button:visited {
+            border: solid 1px #777;
+            color: #777;
+        }
+
+        .Button:hover, .Button:active {
+            background-color: #6e99c9;
+            border: solid 1px #000;
+            color: #fff;
+        }
+
+        .thumbnailIcon {
+            object-fit: cover;
+            width: 120px;
+            height: 70px;
+            padding: 2px;
+        }
+
+        select:disabled {
+            display: none
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="contents">
+        <!-- Встроенный хедер -->
+        <div width=100% height=72px class="banner">
+            <img src="/images/logo.png" alt="Rowex Logo">
+        </div>
+
+        <div width=100% class="navigation">
+            <a href="index.html">Home</a> | 
+            <a href="games.html">Games</a> | 
+            <a href="browse.html">Browse</a> | 
+            <a href="info.html">Info</a>
+        </div>
+        
+        <h1>Games</h1>
+        <table>
+            <tbody style="vertical-align:top;">
+                
+                <tr>
+                    <td width=160px>
+                        <img src="/screenshots/places/1/LevelSmall1.png" width=144px height=98px alt="thumbnail">
+                        &nbsp;
+                        <br>
+                        <img src="/screenshots/places/1/LevelSmall2.png" width=144px height=98px alt="thumbnail">
+                    </td>
+                    <td>
+                        <h1 style="color:green;">Building Demo</h1>
+                        <p>A demo place with all available tools and some buildings. How riveting!</p>
+                    </td>
+                    <td width=60px>
+                        <a href="place.html?id=1">
+                            <img width=53 height=54 src="/images/PlayButton_Green.png" alt="Play">
+                        </a>
+                    </td>
+                    <td width=300px>
+                        <img src="/screenshots/places/1/LevelLarge.png" width=292px height=198px alt="thumbnail">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td width=160px>
+                        <img src="/screenshots/places/2/LevelSmall1.png" width=144px height=98px alt="thumbnail">
+                        &nbsp;
+                        <br>
+                        <img src="/screenshots/places/2/LevelSmall2.png" width=144px height=98px alt="thumbnail">
+                    </td>
+                    <td>
+                        <h1 style="color:red;">Fighting Arena</h1>
+                        <p>A demo place for fighting with Rockets and Slingshots. No swords on these heights though.</p>
+                    </td>
+                    <td width=60px>
+                        <a href="place.html?id=2">
+                            <img width=53 height=54 src="/images/PlayButton_Red.png" alt="Play">
+                        </a>
+                    </td>
+                    <td width=300px>
+                        <img src="/screenshots/places/2/LevelLarge.png" width=292px height=198px alt="thumbnail">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td width=160px>
+                        <img src="/screenshots/places/3/LevelSmall1.png" width=144px height=98px alt="thumbnail">
+                        &nbsp;
+                        <br>
+                        <img src="/screenshots/places/3/LevelSmall2.png" width=144px height=98px alt="thumbnail">
+                    </td>
+                    <td>
+                        <h1 style="color:orange;">Spooky Demo</h1>
+                        <p>A demo place that takes place at night. There <u>no ghosts whatsoever.</u></p>
+                    </td>
+                    <td width=60px>
+                        <a href="place.html?id=3">
+                            <img width=53 height=54 src="/images/PlayButton_Orange.png" alt="Play">
+                        </a>
+                    </td>
+                    <td width=300px>
+                        <img src="/screenshots/places/3/LevelLarge.png" width=292px height=198px alt="thumbnail">
+                    </td>
+                </tr>
+                
+            </tbody>
+        </table>
+        
+        <!-- Встроенный футер -->
+        <hr>
+        <div class="footer">
+            <small>
+                <a href="https://rowex.neocities.org">Rowex</a> originally created by 
+                <a href="https://soikon.neocities.org">Soikon</a>. Check out the <a href="https://github.com/SoikonDevs/Rowex-Website">Source Code</a> on GitHub. 
+                "Online Play Toy"
+            </small>
+        </div>
+    </div>
+</body>
+</html>
