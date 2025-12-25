@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rowex 2025</title>
+    <style>
+        /* MAIN BACKGROUND - SMALL PLASTIC PLATE */
+        body {
+            margin: 0;
+            padding: 10px;
+            color: #000000;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            background-color: #0a6b0a;
+            background-image: url('https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/5X/7/4/2/7/74271da913ead2df3efbe300944f49a7f18dab14.png');
+            background-repeat: repeat;
+            background-size: 150px 150px;
+        }
+        
+        /* MAIN CONTAINER */
+        #container {
+            width: 800px;
+            margin: 10px auto;
+            background: #FFFFFF;
+            border: 2px solid #000000;
+            box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* TOP BANNER */
+        .header-banner {
+            width: 100%;
+            height: 120px;
+            border-bottom: 2px solid #000000;
+            background: #1a4a8a;
+            position: relative;
+        }
+        
+        /* ONLINE STATISTICS - JUMPING EFFECT */
+        .online-box {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #FFCC00;
+            border: 2px solid #000000;
+            padding: 3px 8px;
+            text-align: center;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+        
+        .online-num {
+            font-size: 18px;
+            font-weight: bold;
+            color: #000000;
+            transition: all 0.3s ease;
+        }
+        
+        .online-text {
+            font-size: 10px;
+            color: #000000;
+        }
+        
+        .online-box.jumping {
+            background: #FF9900;
+            transform: translateY(-3px);
+        }
+        
+        .online-num.jumping {
+            color: #FF0000;
+        }
+        
+        /* LOGO AND NAME LEFT */
+        .logo-section {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-align: left;
+        }
+        
+        .game-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: #FFCC00;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 0 #000;
+        }
+        
+        .game-version {
+            font-size: 18px;
+            color: #FFFFFF;
+            font-weight: bold;
+            text-shadow: 1px 1px 0 #000;
+        }
+        
+        /* HIDDEN MENU */
+        .menu {
+            display: none;
+        }
+        
+        /* CONTENT */
+        .content {
+            padding: 15px;
+            background: #FFFFFF;
+        }
+        
+        /* WINTER CONTENT SECTION */
+        .winter-section {
+            display: flex;
+            gap: 20px;
+            margin: 15px 0;
+            align-items: flex-start;
+        }
+        
+        .winter-image {
+            flex: 1;
+            background: #DDDDDD;
+            border: 2px solid #000000;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666666;
+            font-size: 14px;
+            text-align: center;
+            padding: 10px;
+            min-width: 300px;
+            background: linear-gradient(135deg, #e6f7ff 0%, #cceeff 100%);
+        }
+        
+        .winter-text {
+            flex: 1;
+            padding: 10px;
+        }
+        
+        .winter-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #0066CC;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 0 #CCCCCC;
+        }
+        
+        .winter-description {
+            line-height: 1.6;
+            color: #333333;
+            margin-bottom: 15px;
+        }
+        
+        /* PLAY BUTTON UNDER WINTER SECTION */
+        .play-btn-winter {
+            display: inline-block;
+            padding: 10px 25px;
+            background: #009900;
+            color: #FFFFFF;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            border: 2px solid #000000;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .play-btn-winter:hover {
+            background: #00CC00;
+            transform: scale(1.05);
+        }
+        
+        /* NEWS BLOCK */
+        .news-box {
+            background: #EEEEEE;
+            border: 1px solid #000000;
+            margin: 20px 0;
+        }
+        
+        .news-title {
+            background: #1a4a8a;
+            color: #FFFFFF;
+            font-weight: bold;
+            padding: 6px;
+            border-bottom: 1px solid #000000;
+            font-size: 14px;
+        }
+        
+        .news-body {
+            padding: 10px;
+        }
+        
+        /* GALLERY OF 3 IMAGES */
+        .screenshots-gallery {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .screenshot {
+            flex: 1;
+            background: #DDDDDD;
+            border: 1px solid #000000;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666666;
+            font-size: 12px;
+            text-align: center;
+            padding: 5px;
+        }
+        
+        /* SEPARATOR */
+        hr {
+            height: 2px;
+            background: #000000;
+            border: none;
+            margin: 20px 0;
+        }
+        
+        /* FOOTER */
+        .footer {
+            background: #CCCCCC;
+            border-top: 1px solid #000000;
+            padding: 10px;
+            text-align: center;
+            font-size: 11px;
+            color: #000000;
+        }
+        
+        .news-date {
+            color: #1a4a8a;
+            font-weight: bold;
+        }
+        
+        /* ADAPTABILITY */
+        @media (max-width: 850px) {
+            #container {
+                width: 95%;
+                margin: 5px auto;
+            }
+            
+            .header-banner {
+                height: 100px;
+            }
+            
+            .game-title {
+                font-size: 28px;
+            }
+            
+            .game-version {
+                font-size: 14px;
+            }
+            
+            .winter-section {
+                flex-direction: column;
+            }
+            
+            .winter-image {
+                min-width: 100%;
+                height: 150px;
+            }
+            
+            .screenshots-gallery {
+                flex-direction: column;
+            }
+            
+            .screenshot {
+                height: 80px;
+                margin-bottom: 5px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            body {
+                background-size: 100px 100px;
+            }
+            
+            .online-box {
+                padding: 2px 5px;
+                top: 5px;
+                right: 5px;
+            }
+            
+            .online-num {
+                font-size: 16px;
+            }
+            
+            .online-text {
+                font-size: 9px;
+            }
+            
+            .winter-title {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <!-- TOP BANNER -->
+        <div class="header-banner">
+            <div class="online-box" id="onlineBox">
+                <div class="online-num" id="onlineNum">27</div>
+                <div class="online-text">players online</div>
+            </div>
+            
+            <!-- LOGO AND NAME LEFT -->
+            <div class="logo-section">
+                <div class="game-title">Rowex</div>
+                <div class="game-version">Alpha Version</div>
+            </div>
+        </div>
+        
+        <!-- HIDDEN MENU -->
+        <div class="menu">
+            <a href="#">HOME</a>
+            <a href="test.html">PLAY</a>
+            <a href="#">FORUM</a>
+            <a href="#">SKINS</a>
+            <a href="#">HELP</a>
+        </div>
+        
+        <div class="content">
+            <!-- WINTER SECTION -->
+            <div class="winter-section">
+                <div class="winter-image">
+                    [WINTER_SCREENSHOT.jpg]<br>
+                    Winter gameplay screenshot
+                </div>
+                
+                <div class="winter-text">
+                    <div class="winter-title">WINTER UPDATE 2025</div>
+                    <div class="winter-description">
+                        Experience the magic of winter in Rowex! Build snow forts, 
+                        create ice castles, and explore frozen landscapes. 
+                        New winter blocks, snow physics, and holiday decorations 
+                        make this the perfect seasonal update.
+                        <br><br>
+                        Slide on icy surfaces, throw snowballs with friends, 
+                        and light up your creations with holiday lights. 
+                        The winter world is waiting for you!
+                    </div>
+                    <a href="test.html" class="play-btn-winter">PLAY WINTER UPDATE</a>
+                </div>
+            </div>
+            
+            <!-- NEWS BLOCK -->
+            <div class="news-box">
+                <div class="news-title">NEWS AND SCREENSHOTS</div>
+                <div class="news-body">
+                    <!-- GALLERY OF 3 IMAGES -->
+                    <div class="screenshots-gallery">
+                        <div class="screenshot" id="screenshot1">
+                            [screenshot_city.jpg]
+                        </div>
+                        <div class="screenshot" id="screenshot2">
+                            [screenshot_battle.jpg]
+                        </div>
+                        <div class="screenshot" id="screenshot3">
+                            [screenshot_vehicles.jpg]
+                        </div>
+                    </div>
+                    
+                    <div class="main-text">
+                        <span class="news-date">15.12.2025</span> - Winter Update released!<br>
+                        <span class="news-date">10.12.2025</span> - Snow physics improved<br>
+                        <span class="news-date">05.12.2025</span> - Holiday event started<br>
+                        <span class="news-date">28.11.2025</span> - New winter blocks added
+                    </div>
+                </div>
+            </div>
+            
+            <hr>
+            
+            <!-- MAIN TEXT -->
+            <div class="main-text">
+                <strong>Rowex 2025</strong> - modern 3D browser game. 
+                Build with blocks, create unique worlds and play with friends. 
+                No downloads, the game works right in your browser!
+                <br><br>
+                Join our community of players who are already enjoying Rowex.
+                <br><br>
+                <em>Rowex Alpha Version - test new features first!</em>
+            </div>
+        </div>
+        
+        <div class="footer">
+            © 2025 Rowex Alpha Version. All rights reserved.
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DYNAMIC ONLINE COUNTER (23-30 with jumping effect)
+            let onlineNum = document.getElementById('onlineNum');
+            let onlineBox = document.getElementById('onlineBox');
+            
+            function updateOnlineCounter() {
+                if (onlineNum && onlineBox) {
+                    // Generate random number between 23 and 30
+                    let newValue = Math.floor(Math.random() * 8) + 23;
+                    
+                    // Add jumping effect
+                    onlineBox.classList.add('jumping');
+                    onlineNum.classList.add('jumping');
+                    
+                    // Update number with slight delay for visual effect
+                    setTimeout(() => {
+                        onlineNum.textContent = newValue;
+                        
+                        // Remove jumping effect after update
+                        setTimeout(() => {
+                            onlineBox.classList.remove('jumping');
+                            onlineNum.classList.remove('jumping');
+                        }, 300);
+                    }, 150);
+                }
+            }
+            
+            // Update counter every 3-8 seconds randomly (fast changes)
+            function scheduleNextUpdate() {
+                let delay = Math.floor(Math.random() * 5000) + 3000; // 3-8 seconds
+                setTimeout(() => {
+                    updateOnlineCounter();
+                    scheduleNextUpdate();
+                }, delay);
+            }
+            
+            // Start the dynamic updates
+            scheduleNextUpdate();
+            
+            // Screenshot file names
+            const screenshotFiles = [
+                "screenshot_city.jpg",
+                "screenshot_battle.jpg", 
+                "screenshot_vehicles.jpg",
+                "screenshot_winter.jpg",
+                "screenshot_snow.jpg"
+            ];
+            
+            // Screenshot descriptions
+            const screenshotDescriptions = [
+                "Future City - build skyscrapers",
+                "Sword battle - PvP mode",
+                "Racing with futuristic vehicles",
+                "Winter landscape - snow and ice",
+                "Snowball fight - winter fun"
+            ];
+            
+            // Update screenshots every 20 seconds
+            let currentScreenshotIndex = 0;
+            const screenshotElements = [
+                document.getElementById('screenshot1'),
+                document.getElementById('screenshot2'),
+                document.getElementById('screenshot3')
+            ];
+            
+            function updateScreenshots() {
+                for (let i = 0; i < screenshotElements.length; i++) {
+                    const index = (currentScreenshotIndex + i) % screenshotFiles.length;
+                    if (screenshotElements[i]) {
+                        screenshotElements[i].textContent = `[${screenshotFiles[index]}]`;
+                        screenshotElements[i].title = screenshotDescriptions[index];
+                    }
+                }
+                currentScreenshotIndex = (currentScreenshotIndex + 1) % screenshotFiles.length;
+            }
+            
+            // Initial update and interval setup
+            updateScreenshots();
+            setInterval(updateScreenshots, 20000);
+        });
+    </script>
+</body>
+</html>
