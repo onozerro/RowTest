@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info - Rowex</title>
+    <style>
+        body {
+            background: white;
+            font-size: 12px;
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+        }
+
+        h1 {
+            font-weight: normal;
+            font-size: 24px;
+        }
+
+        h2 {
+            font-weight: normal;
+        }
+
+        img {
+            max-width:100%; 
+            height: auto;
+        }
+
+        .contents {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+        }
+
+        .banner {
+            background-image: url("/images/banner.png");
+            height: 72px;
+            text-align: center;
+            vertical-align: middle;
+            border-bottom: solid 1px black;
+            border-left: solid 1px black;
+            border-right: solid 1px black;
+        }
+
+        .navigation {
+            background-color: #6e99c9;
+            border-bottom: solid 1px black;
+            margin-bottom: 8px;
+            border-left: solid 1px black;
+            border-right: solid 1px black;
+            font-size: 14pt;
+            line-height: 2em;
+            text-align: center;
+            color: white;
+        }
+
+        .navigation a:link {
+            color: white;
+        }
+
+        .navigation a:visited {
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+        }
+
+        .browseTable {
+            border-collapse: collapse;
+            margin-bottom: 0px;
+            background-color:"White";
+            border-color:"#CCCCCC";
+            border-width:1px;
+            border-style:solid;
+        }
+
+        .browseHeader {
+            background-color: #6e99c9;
+            color: white;
+        }
+
+        .profileDiv {
+            width: 100%;
+            height: 100%;
+            background-color: lightsteelblue;
+            border-top: solid 1px black;
+            border-bottom: solid 1px black;
+            border-left: solid 1px black;
+            border-right: solid 1px black;
+            font-size: 14pt;
+            text-align: center;
+            padding-top: 2px;
+            padding-right: 2px;
+            padding-bottom: 2px;
+            padding-left: 2px;
+        }
+
+        .profileDesc {
+            font-size: 9pt;
+        }
+
+        .Button {
+            cursor: pointer;
+            background-color: #fff;
+            border: solid 1px #333;
+            color: #333;
+            font-family: Verdana, Sans-Serif;
+            font-size: 0.9em;
+            text-decoration: none;
+        }
+
+        .Button:link, .Button:visited {
+            border: solid 1px #777;
+            color: #777;
+        }
+
+        .Button:hover, .Button:active {
+            background-color: #6e99c9;
+            border: solid 1px #000;
+            color: #fff;
+        }
+
+        .thumbnailIcon {
+            object-fit: cover;
+            width: 120px;
+            height: 70px;
+            padding: 2px;
+        }
+
+        select:disabled {
+            display: none
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="contents">
+        <!-- Встроенный хедер -->
+        <div width=100% height=72px class="banner">
+            <img src="/images/logo.png" alt="Rowex Logo">
+        </div>
+
+        <div width=100% class="navigation">
+            <a href="index.html">Home</a> | 
+            <a href="games.html">Games</a> | 
+            <a href="browse.html">Browse</a> | 
+            <a href="info.html">Info</a>
+        </div>
+        
+        <table>
+            <tbody style="vertical-align:top;">
+                <tr>
+                    <td>
+                        <h1>Information</h1>
+                        <h2>What is this website?</h2>
+                        <p>This website is based on Soikon's <a href="https://github.com/SoikonDevs/Rowex-Website">Rowex Website</a> found on GitHub.</p>
+                        <h2>How do I visit places in singleplayer?</h2>
+                        <p>To visit a place in singleplayer, you will need to download a client or client launcher to enjoy the game properly. Here are some options for clients.</p>
+                        <ul>
+                            <li><a href="https://bitl.itch.io/novetus" target="_blank">Novetus (2006S to 2011M)</a></li>
+                            <li><a href="https://github.com/MaximumADHD/Roblox_0.3.368.0" target="_blank">Rowex, March 2007 (Unpatched)</a></li>
+                            <li><a href="https://github.com/MaximumADHD/Roblox-2007-Client" target="_blank">Rowex, August 2007 (Unpatched)</a></li>
+                            <li><a href="https://github.com/MaximumADHD/Roblox-2008-Client" target="_blank">Rowex, Mid 2008 (Unpatched)</a></li>
+                            <li><a href="https://github.com/MaximumADHD/Roblox-2009-Client" target="_blank">Rowex, Late 2009 (Unpatched)</a></li>
+                        </ul>
+                        <p>If you want to play GodoBlocks games, they have to be opened in its dedicated client. You can download the client for Windows, MacOS and Linux <a href="https://godoblocks.neocities.org/install#:~:text=GodoBlocks%20Beta%208.2_02">with this link.</a></p>
+                        <h2>License Information (MIT)</h2>
+                        <p>This project uses code and/or assets from the Rowex Website.</p>
+                        <p>Copyright (c) 2023-present Soikon (https://soikon.neocities.org)</p>
+                        <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+                        <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+                        <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- Встроенный футер -->
+        <hr>
+        <div class="footer">
+            <small>
+                <a href="https://rowex.neocities.org">Rowex</a> originally created by 
+                <a href="https://soikon.neocities.org">Soikon</a>. Check out the <a href="https://github.com/SoikonDevs/Rowex-Website">Source Code</a> on GitHub. 
+                "Online Play Toy"
+            </small>
+        </div>
+    </div>
+</body>
+</html>
