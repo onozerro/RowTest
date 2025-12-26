@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Rowex 2025</title>
     <style>
         /* MAIN BACKGROUND - SMALL PLASTIC PLATE */
         body {
             margin: 0;
-            padding: 10px;
+            padding: 0;
             color: #000000;
             font-family: Arial, sans-serif;
             font-size: 12px;
@@ -16,15 +16,25 @@
             background-image: url('https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/5X/7/4/2/7/74271da913ead2df3efbe300944f49a7f18dab14.png');
             background-repeat: repeat;
             background-size: 150px 150px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow-x: hidden;
         }
         
-        /* MAIN CONTAINER */
+        /* MAIN CONTAINER - FIXED SIZE */
         #container {
             width: 800px;
-            margin: 10px auto;
+            min-width: 800px;
+            max-width: 800px;
+            margin: 10px;
             background: #FFFFFF;
             border: 2px solid #000000;
             box-shadow: 5px 5px 0px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            position: relative;
+            z-index: 1;
         }
         
         /* TOP BANNER */
@@ -128,11 +138,13 @@
             padding: 10px;
             min-width: 300px;
             background: linear-gradient(135deg, #e6f7ff 0%, #cceeff 100%);
+            box-sizing: border-box;
         }
         
         .winter-text {
             flex: 1;
             padding: 10px;
+            box-sizing: border-box;
         }
         
         .winter-title {
@@ -161,6 +173,7 @@
             border: 2px solid #000000;
             border-radius: 4px;
             transition: all 0.2s;
+            box-sizing: border-box;
         }
         
         .play-btn-winter:hover {
@@ -173,6 +186,7 @@
             background: #EEEEEE;
             border: 1px solid #000000;
             margin: 20px 0;
+            box-sizing: border-box;
         }
         
         .news-title {
@@ -186,6 +200,7 @@
         
         .news-body {
             padding: 10px;
+            box-sizing: border-box;
         }
         
         /* GALLERY OF 3 IMAGES */
@@ -194,6 +209,7 @@
             justify-content: space-between;
             gap: 10px;
             margin: 10px 0;
+            box-sizing: border-box;
         }
         
         .screenshot {
@@ -208,6 +224,7 @@
             font-size: 12px;
             text-align: center;
             padding: 5px;
+            box-sizing: border-box;
         }
         
         /* SEPARATOR */
@@ -226,6 +243,7 @@
             text-align: center;
             font-size: 11px;
             color: #000000;
+            box-sizing: border-box;
         }
         
         .news-date {
@@ -233,11 +251,20 @@
             font-weight: bold;
         }
         
-        /* ADAPTABILITY */
+        /* MOBILE FIX - CENTERED SCALING */
         @media (max-width: 850px) {
+            body {
+                padding: 5px;
+                background-size: 100px 100px;
+                overflow-x: auto;
+            }
+            
             #container {
                 width: 95%;
+                min-width: unset;
+                max-width: 95%;
                 margin: 5px auto;
+                transform-origin: top center;
             }
             
             .header-banner {
@@ -269,12 +296,6 @@
                 height: 80px;
                 margin-bottom: 5px;
             }
-        }
-        
-        @media (max-width: 600px) {
-            body {
-                background-size: 100px 100px;
-            }
             
             .online-box {
                 padding: 2px 5px;
@@ -294,9 +315,49 @@
                 font-size: 18px;
             }
         }
+        
+        /* SMALL PHONES */
+        @media (max-width: 480px) {
+            #container {
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                border: none;
+                box-shadow: none;
+            }
+            
+            .content {
+                padding: 10px;
+            }
+            
+            .winter-image {
+                height: 120px;
+            }
+            
+            .screenshot {
+                height: 60px;
+            }
+        }
+        
+        /* BACKGROUND FIX - COVERS EDGES */
+        .background-fix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0a6b0a;
+            background-image: url('https://devforum-uploads.s3.dualstack.us-east-2.amazonaws.com/uploads/original/5X/7/4/2/7/74271da913ead2df3efbe300944f49a7f18dab14.png');
+            background-repeat: repeat;
+            background-size: 150px 150px;
+            z-index: -1;
+        }
     </style>
 </head>
 <body>
+    <!-- BACKGROUND FIX -->
+    <div class="background-fix"></div>
+    
     <div id="container">
         <!-- TOP BANNER -->
         <div class="header-banner">
@@ -470,6 +531,24 @@
             // Initial update and interval setup
             updateScreenshots();
             setInterval(updateScreenshots, 20000);
+            
+            // Force container width on mobile to prevent stretching
+            function fixMobileLayout() {
+                const container = document.getElementById('container');
+                if (window.innerWidth <= 850) {
+                    // На мобильных - центрируем
+                    container.style.margin = '0 auto';
+                    container.style.transform = 'scale(0.95)';
+                } else {
+                    // На ПК - обычный вид
+                    container.style.margin = '10px auto';
+                    container.style.transform = 'none';
+                }
+            }
+            
+            // Apply on load and resize
+            fixMobileLayout();
+            window.addEventListener('resize', fixMobileLayout);
         });
     </script>
 </body>
